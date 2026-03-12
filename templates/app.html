@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CutPlan Pro — Diamond Fabrics</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+:root{
+  --nv:#0c1829;--bl:#1a56db;--tl:#0891b2;--gr:#059669;
+  --or:#d97706;--rd:#dc2626;--pu:#7c3aed;--pi:#db2777;
+  --bg:#edf1f7;--wh:#fff;--bd:#dde4ee;--tx:#18273a;
+  --mu:#5d7490;--lt:#f3f6fb;--ac:#dbeafe;
+  --fn:'Outfit',sans-serif;--mo:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--fn);background:var(--bg);color:var(--tx);font-size:13px;display:flex;flex-direction:column}
+
+/* TOPBAR */
+.top{height:50px;background:var(--nv);display:flex;align-items:center;padding:0 14px;
+  border-bottom:2px solid var(--bl);box-shadow:0 2px 14px rgba(0,0,0,.3);flex-shrink:0}
+.logo{display:flex;align-items:center;gap:9px;margin-right:16px}
+.lmk{width:32px;height:32px;background:linear-gradient(135deg,var(--bl),var(--tl));
+  border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;
+  box-shadow:0 2px 8px rgba(26,86,219,.4)}
+.lt{color:#fff;font-weight:800;font-size:14px;letter-spacing:-.3px}
+.ls{color:rgba(255,255,255,.35);font-size:9px;font-family:var(--mo)}
+.nav{display:flex;gap:2px}
+.nb{padding:5px 12px;border:none;background:transparent;color:rgba(255,255,255,.5);
+  font-size:11px;font-weight:700;font-family:var(--fn);cursor:pointer;border-radius:5px;
+  transition:.15s;display:flex;align-items:center;gap:4px}
+.nb:hover{background:rgba(255,255,255,.08);color:#fff}
+.nb.on{background:var(--bl);color:#fff}
+.tr{margin-left:auto;display:flex;align-items:center;gap:7px}
+.uc{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:4px 11px 4px 6px;font-size:11px;color:#fff}
+.ua{width:22px;height:22px;background:var(--bl);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.lo-btn{padding:5px 11px;border:1px solid rgba(255,255,255,.12);border-radius:6px;
+  background:transparent;color:rgba(255,255,255,.55);font-size:11px;cursor:pointer;font-family:var(--fn);transition:.15s}
+.lo-btn:hover{background:rgba(220,38,38,.2);border-color:rgba(220,38,38,.4);color:#fca5a5}
+
+/* LAYOUT */
+.body{display:flex;flex:1;overflow:hidden}
+.sb{width:306px;background:var(--wh);border-right:1px solid var(--bd);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
+.sbp{display:none;flex-direction:column;height:100%}
+.sbp.on{display:flex}
+.sbh{padding:10px 13px;background:var(--lt);border-bottom:1px solid var(--bd);
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--mu);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.sbb{padding:11px 12px;overflow-y:auto;flex:1}
+.mn{flex:1;overflow-y:auto;padding:14px}
+
+/* SECTION DIVIDER */
+.sd{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mu);
+  display:flex;align-items:center;gap:7px;margin:10px 0 7px}
+.sd::after{content:'';flex:1;height:1px;background:var(--bd)}
+
+/* CARD */
+.card{background:var(--wh);border-radius:10px;border:1px solid var(--bd);padding:14px;margin-bottom:12px}
+.ch{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--mu);
+  margin-bottom:11px;display:flex;align-items:center;gap:6px}
+
+/* FIELDS */
+.f{margin-bottom:8px}
+.f label{display:block;font-size:10px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.f input,.f select,.f textarea{width:100%;padding:6px 9px;border:1.5px solid var(--bd);border-radius:6px;
+  font-size:12px;font-family:var(--fn);background:var(--wh);color:var(--tx);outline:none;transition:.15s}
+.f input:focus,.f select:focus{border-color:var(--bl);box-shadow:0 0 0 2px rgba(26,86,219,.1)}
+.f input.af{background:#f0fdf4;border-color:#86efac}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+
+/* PDF DROP */
+.dz{border:2px dashed #93c5fd;border-radius:9px;padding:14px;text-align:center;
+  cursor:pointer;background:#eff6ff;position:relative;transition:.2s}
+.dz:hover,.dz.dg{background:#dbeafe;border-color:var(--bl)}
+.dz input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.pm{display:none;border-radius:6px;padding:7px 10px;font-size:11px;margin-top:6px}
+.pm.ok{display:block;background:#f0fdf4;border:1px solid #86efac;color:#166534}
+.pm.er{display:block;background:#fef2f2;border:1px solid #fca5a5;color:#991b1b}
+.pm.ld{display:block;background:#eff6ff;border:1px solid #93c5fd;color:var(--bl)}
+
+/* SIZE GRID */
+.szg{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.szc label{display:block;font-size:9px;font-weight:700;color:var(--mu);text-align:center;margin-bottom:2px}
+.szc input{text-align:center;padding:4px 2px;font-family:var(--mo);font-size:12px}
+
+/* SHRINKAGE */
+.shg{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.shc{text-align:center}
+.shc input{text-align:center;padding:4px 2px;font-family:var(--mo);font-size:11px}
+.shl{display:block;margin-bottom:3px}
+
+/* BADGES */
+.bdg{display:inline-block;padding:2px 7px;border-radius:9px;font-size:10px;font-weight:700;white-space:nowrap}
+.b3x2{background:#d1fae5;color:#065f46}.b3x3{background:#dbeafe;color:#1e40af}
+.b2x2{background:#fef3c7;color:#92400e}.b4x3{background:#ede9fe;color:#5b21b6}
+.bfl{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1}
+.bs-draft{background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700}
+.bs-final{background:#d1fae5;color:#065f46;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700}
+.bs-admin{background:#ede9fe;color:#5b21b6;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700}
+.bs-planner{background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700}
+.bs-manager{background:#fef9c3;color:#854d0e;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700}
+.bs-viewer{background:#f1f5f9;color:#475569;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700;border:1px solid #cbd5e1}
+
+/* MARKERS */
+.mk{background:var(--lt);border:1px solid var(--bd);border-radius:8px;padding:8px;margin-bottom:6px;transition:.15s}
+.mk:hover{border-color:#93c5fd}
+.mkh{display:flex;align-items:flex-end;gap:5px;margin-bottom:6px;flex-wrap:wrap}
+.mknum{background:var(--nv);color:#fff;width:19px;height:19px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0}
+.mkp{font-family:var(--mo);font-size:17px;font-weight:600;color:var(--nv);
+  width:60px;text-align:center;border:2px solid #fbbf24;border-radius:5px;padding:3px;background:#fffbeb}
+.mks{font-size:11px;padding:4px;border:1.5px solid var(--bd);border-radius:5px;font-family:var(--fn)}
+.szm{display:grid;grid-template-columns:repeat(8,1fr);gap:3px}
+.szmc span{display:block;font-size:9px;color:var(--mu);font-weight:700;text-align:center}
+.szmc input{text-align:center;padding:3px 1px;font-size:11px;font-family:var(--mo)}
+
+/* BUTTONS */
+.btn{padding:6px 13px;border:none;border-radius:7px;cursor:pointer;font-size:12px;font-weight:700;
+  font-family:var(--fn);transition:.15s;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.btn:active{transform:scale(.97)}
+.bb{background:var(--bl);color:#fff}.bb:hover{background:#1d4ed8}
+.bg{background:var(--gr);color:#fff}.bg:hover{background:#047857}
+.bo{background:var(--or);color:#fff}.bt{background:var(--tl);color:#fff}
+.bdk{background:var(--nv);color:#fff}
+.bgh{background:transparent;border:1.5px solid var(--bd);color:var(--mu)}.bgh:hover{border-color:var(--bl);color:var(--bl)}
+.br{background:#fee2e2;color:var(--rd);font-size:10px;padding:3px 7px}
+.sm{font-size:11px;padding:5px 9px}.xs{font-size:10px;padding:3px 7px}
+.fw{width:100%;justify-content:center;padding:9px}
+.pulse{animation:pl 2s ease-in-out infinite}
+@keyframes pl{0%,100%{box-shadow:0 0 0 0 rgba(5,150,105,.35)}50%{box-shadow:0 0 0 7px rgba(5,150,105,0)}}
+
+/* STATS */
+.sr{display:grid;gap:8px}.s4{grid-template-columns:repeat(4,1fr)}
+.sc{background:var(--wh);border-radius:9px;padding:12px 14px;border:1px solid var(--bd);border-top:3px solid var(--bl)}
+.sc.tg{border-top-color:var(--gr)}.sc.to{border-top-color:var(--or)}
+.sc.tr{border-top-color:var(--rd)}.sc.tt{border-top-color:var(--tl)}
+.sc.tp{border-top-color:var(--pu)}.sc.tpi{border-top-color:var(--pi)}
+.sv{font-size:22px;font-weight:700;font-family:var(--mo);color:var(--nv)}
+.sl{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
+
+/* TABLES */
+.tw{overflow-x:auto;border-radius:8px;border:1px solid var(--bd)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--nv);color:#fff;padding:8px 5px;text-align:center;
+  font-size:10px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+td{padding:5px 4px;border-bottom:1px solid var(--bd);text-align:center}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--lt)}
+.tf td{background:var(--nv)!important;color:#fff;font-weight:700}
+.roq td{background:#fffbeb}.rcr td{background:#fff7ed}
+.rac td{background:#f0fdf4}.rbl td{background:#eff6ff}
+
+/* COLORS */
+.cg{color:var(--gr);font-weight:700}.cr{color:var(--rd);font-weight:700}
+.co{color:var(--or);font-weight:700}.cb{color:var(--bl);font-weight:700}
+
+/* PROGRESS */
+.pw{background:#e2e8f0;border-radius:99px;height:6px;overflow:hidden;margin-top:3px}
+.pb{height:100%;border-radius:99px;transition:width .5s}
+.pgg{background:var(--gr)}.pgo{background:var(--or)}.pgr{background:var(--rd)}
+
+/* FABRIC CARDS */
+.fabrow{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:11px}
+.fabc{background:var(--wh);border:1px solid var(--bd);border-radius:8px;padding:9px 7px}
+.fabn{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin:5px 0}
+.fabni{text-align:center}
+.fabnv{font-size:13px;font-weight:700;font-family:var(--mo)}
+.fabnl{font-size:9px;color:var(--mu);text-transform:uppercase}
+
+/* MULTI-FABRIC */
+.fab-item{background:var(--lt);border:1px solid var(--bd);border-radius:7px;padding:8px;margin-bottom:6px;position:relative}
+.fab-item-head{display:flex;align-items:center;gap:6px;margin-bottom:7px;flex-wrap:wrap}
+
+/* ORDER ITEMS */
+.oi{border:1.5px solid var(--bd);border-radius:7px;padding:8px 11px;margin-bottom:5px;
+  cursor:pointer;transition:.15s;background:var(--wh)}
+.oi:hover{border-color:#93c5fd;background:var(--ac)}
+.oi.sel{border-color:var(--bl);background:var(--ac)}
+.oit{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
+.oino{font-family:var(--mo);font-size:12px;font-weight:600;color:var(--nv)}
+.oisub{font-size:11px;color:var(--mu)}
+
+/* PILLS */
+.pill{display:inline-flex;align-items:center;gap:3px;background:var(--ac);
+  border:1px solid #bfdbfe;border-radius:20px;padding:2px 9px;
+  font-size:11px;color:var(--bl);font-weight:600;margin-right:4px;margin-bottom:4px}
+
+/* MODALS */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;
+  align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.mbg.on{display:flex}
+.modal{background:var(--wh);border-radius:12px;padding:22px;width:480px;
+  max-width:95vw;max-height:92vh;overflow-y:auto;
+  box-shadow:0 24px 60px rgba(0,0,0,.2);animation:mi .2s ease}
+@keyframes mi{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.mt{font-size:14px;font-weight:800;color:var(--nv);margin-bottom:16px;display:flex;align-items:center;gap:7px}
+.mf{display:flex;gap:7px;margin-top:16px;justify-content:flex-end}
+
+/* TOAST */
+.tst{position:fixed;top:13px;right:13px;z-index:9999;display:flex;flex-direction:column;gap:5px}
+.ti{background:var(--wh);border-radius:9px;padding:10px 14px;font-size:12px;font-weight:600;
+  box-shadow:0 8px 24px rgba(0,0,0,.15);border-left:4px solid var(--gr);
+  animation:tin .25s ease;min-width:210px}
+.ti.e{border-left-color:var(--rd)}.ti.w{border-left-color:var(--or)}
+@keyframes tin{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+
+/* CHART BARS (CSS only) */
+.chart-bar-wrap{display:flex;flex-direction:column;gap:6px}
+.cb-row{display:flex;align-items:center;gap:8px;font-size:11px}
+.cb-label{width:70px;text-align:right;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px}
+.cb-track{flex:1;background:#e2e8f0;border-radius:99px;height:16px;overflow:hidden}
+.cb-fill{height:100%;border-radius:99px;display:flex;align-items:center;padding-left:7px;
+  font-size:9px;font-weight:700;color:#fff;transition:width .6s ease;white-space:nowrap;overflow:hidden}
+.cb-val{width:55px;font-family:var(--mo);font-weight:600;font-size:11px;text-align:right}
+
+/* EMPTY */
+.es{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:55vh;text-align:center;color:var(--mu);padding:36px}
+.es-ic{font-size:50px;margin-bottom:14px;opacity:.6}
+.es-t{font-size:16px;font-weight:800;color:var(--nv);margin-bottom:6px}
+.es-s{font-size:13px;line-height:1.6;max-width:290px;margin-bottom:18px}
+.flist{background:var(--wh);border:1px solid var(--bd);border-radius:9px;padding:13px;text-align:left;min-width:250px}
+.fi{display:flex;align-items:center;gap:7px;padding:3px 0;font-size:12px}
+.fd{width:5px;height:5px;border-radius:50%;background:var(--gr);flex-shrink:0}
+
+/* KPI */
+.dkpi{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:13px}
+.kc{background:var(--wh);border-radius:9px;border:1px solid var(--bd);padding:14px;text-align:center;border-top:3px solid var(--bl)}
+.kc.ko{border-top-color:var(--or)}.kc.kg{border-top-color:var(--gr)}.kc.kt{border-top-color:var(--tl)}.kc.kp{border-top-color:var(--pu)}
+.kv{font-size:28px;font-weight:800;font-family:var(--mo);color:var(--nv)}
+.kl{font-size:11px;color:var(--mu);margin-top:2px}
+
+/* REPORT GRID */
+.rep-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+
+/* STOCK */
+.stk-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px}
+.stk-c{background:var(--wh);border:1px solid var(--bd);border-radius:8px;padding:11px;text-align:center}
+.stk-v{font-size:20px;font-weight:700;font-family:var(--mo);color:var(--nv)}
+.stk-l{font-size:9px;color:var(--mu);text-transform:uppercase;margin-top:2px}
+
+@media print{.sb,.top .nav,.tr,.no-print{display:none!important}.body{display:block}.mn{overflow:visible;padding:8px}}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="logo">
+    <div class="lmk">✂️</div>
+    <div><div class="lt">CutPlan Pro</div><div class="ls">Diamond Fabrics Ltd.</div></div>
+  </div>
+  <nav class="nav" id="nav"></nav>
+  <div class="tr">
+    <div class="uc"><div class="ua" id="uav">?</div><span id="udn">…</span></div>
+    <button class="lo-btn" onclick="location.href='/logout'">Logout</button>
+  </div>
+</div>
+
+<div class="body">
+<div class="sb">
+
+  <!-- DASHBOARD SB -->
+  <div class="sbp on" id="sb-dash">
+    <div class="sbh">Overview</div>
+    <div class="sbb">
+      <div id="sb-kpis"></div>
+      <div class="sd" style="margin-top:12px">Recent Activity</div>
+      <div id="sb-act" style="font-size:11px"></div>
+    </div>
+  </div>
+
+  <!-- ORDERS SB -->
+  <div class="sbp" id="sb-orders">
+    <div class="sbh">Orders
+      <button class="btn bb xs" onclick="newOrd()">+ New</button>
+    </div>
+    <div class="sbb" id="sb-ol" style="padding:9px"></div>
+  </div>
+
+  <!-- PLANNER SB -->
+  <div class="sbp" id="sb-planner">
+    <div class="sbh">Plan Settings</div>
+    <div class="sbb" style="padding:10px 12px">
+
+      <!-- PDF -->
+      <div class="sd" style="margin-top:0">PDF Auto-Fill</div>
+      <div class="dz" id="dz">
+        <input type="file" accept=".pdf" id="pfi" onchange="doPDF(this)">
+        <div style="font-size:20px;margin-bottom:4px">📋</div>
+        <div style="font-size:12px;font-weight:700;color:var(--bl)">Drop PDF here</div>
+        <div style="font-size:10px;color:var(--mu);margin-top:1px">or click to upload</div>
+      </div>
+      <div class="pm" id="pm"></div>
+
+      <!-- ORDER INFO -->
+      <div class="sd">Order Information</div>
+      <div class="f2">
+        <div class="f"><label>Order No</label><input id="ono"></div>
+        <div class="f"><label>Style No</label><input id="sty"></div>
+      </div>
+      <div class="f2">
+        <div class="f"><label>Customer</label><input id="cust"></div>
+        <div class="f"><label>Cust PO</label><input id="cpo"></div>
+      </div>
+      <div class="f2">
+        <div class="f"><label>Article No</label><input id="art"></div>
+        <div class="f"><label>Season</label><input id="season" placeholder="SS25"></div>
+      </div>
+      <div class="f"><label>Description</label><input id="desc"></div>
+      <div class="f2">
+        <div class="f"><label>Pocketing</label><input id="poc"></div>
+        <div class="f"><label>Width (cm)</label><input type="number" id="wid" value="166"></div>
+      </div>
+      <div class="f3">
+        <div class="f"><label>Avg Cons (m)</label><input type="number" id="cons" value="1.12" step="0.01"></div>
+        <div class="f"><label>Order Qty</label><input type="number" id="oq" value="2000" oninput="recalc()"></div>
+        <div class="f"><label>Excess %</label><input type="number" id="ex" value="3" step="0.1" oninput="recalc()"></div>
+      </div>
+      <div style="background:var(--lt);border-radius:6px;padding:5px 9px;font-size:11px;border:1px solid var(--bd);margin-bottom:4px">
+        Cut Req: <strong id="crd" class="co">—</strong> &nbsp;|&nbsp; Sizes Total: <strong id="szd" class="cb">—</strong>
+      </div>
+
+      <!-- FABRICS (multiple) -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0 6px">
+        <div class="sd" style="margin:0;flex:1">Fabrics (multiple allowed)</div>
+        <button class="btn bt xs" onclick="addFabric()" style="margin-left:8px">+ Add</button>
+      </div>
+      <div id="fab-list"></div>
+
+      <!-- SIZES -->
+      <div class="sd">Size Wise Order Qty</div>
+      <div class="szg" id="szinp"></div>
+      <div style="font-size:9px;font-weight:700;color:var(--mu);text-transform:uppercase;margin:6px 0 4px">Cut Required / Size:</div>
+      <div class="szg" id="crrow"></div>
+
+      <!-- SHRINKAGE -->
+      <div class="sd">Shrinkage Fabric Available (m)</div>
+      <div class="shg">
+        <div class="shc"><span class="shl"><span class="bdg b3x2">3X2</span></span><input type="number" id="sh_3x2" value="1232" oninput="upFab()"></div>
+        <div class="shc"><span class="shl"><span class="bdg b3x3">3X3</span></span><input type="number" id="sh_3x3" value="666"  oninput="upFab()"></div>
+        <div class="shc"><span class="shl"><span class="bdg b2x2">2X2</span></span><input type="number" id="sh_2x2" value="150"  oninput="upFab()"></div>
+        <div class="shc"><span class="shl"><span class="bdg b4x3">4X3</span></span><input type="number" id="sh_4x3" value="146"  oninput="upFab()"></div>
+        <div class="shc"><span class="shl"><span class="bdg bfl">F/L</span></span> <input type="number" id="sh_fl"  value="200"  oninput="upFab()"></div>
+      </div>
+      <div style="font-size:11px;color:var(--mu);margin-top:4px;margin-bottom:4px">Total: <strong id="ft">2394 m</strong></div>
+
+      <!-- MARKERS -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0 6px">
+        <div class="sd" style="margin:0;flex:1">Markers (max 10 bundles)</div>
+        <button class="btn bt xs" onclick="addMk()" style="margin-left:8px">+ Add</button>
+      </div>
+      <div id="mkblocks"></div>
+
+      <!-- NOTES -->
+      <div class="sd">Notes / Instructions</div>
+      <div class="f"><textarea id="notes" rows="2" style="font-size:12px;resize:vertical" placeholder="Special cutting instructions…"></textarea></div>
+
+      <!-- ACTIONS -->
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
+        <button class="btn bg fw pulse" onclick="autoOpt()">🤖 Auto Optimize Plan</button>
+        <button class="btn bb fw" onclick="genPlan()">⚡ Generate from Markers</button>
+        <div class="f2">
+          <button class="btn bdk fw" onclick="saveOrd()">💾 Save Order</button>
+          <button class="btn bgh fw" onclick="clrForm()">Clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STOCK SB -->
+  <div class="sbp" id="sb-stock">
+    <div class="sbh">Fabric Stock
+      <button class="btn bg xs" onclick="saveStock()">Save</button>
+    </div>
+    <div class="sbb" id="sb-stk" style="padding:11px"></div>
+  </div>
+
+  <!-- REPORTS SB -->
+  <div class="sbp" id="sb-reports">
+    <div class="sbh">Analytics</div>
+    <div class="sbb">
+      <div id="sb-rep-sum" style="font-size:12px"></div>
+    </div>
+  </div>
+
+  <!-- USERS SB -->
+  <div class="sbp" id="sb-users">
+    <div class="sbh">Users
+      <button class="btn bb xs" onclick="openMod('mod-user')">+ Add</button>
+    </div>
+    <div class="sbb" id="sb-ul" style="padding:9px"></div>
+  </div>
+
+</div><!-- /sb -->
+
+<div class="mn">
+
+  <!-- DASHBOARD -->
+  <div id="v-dash">
+    <div class="dkpi" id="dkpi"></div>
+    <div class="card">
+      <div class="ch">📋 Recent Orders</div>
+      <div class="tw"><table>
+        <thead><tr><th>Order No</th><th>Style</th><th>Customer</th><th>Qty</th><th>Status</th><th>By</th><th>Date</th><th></th></tr></thead>
+        <tbody id="dt"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- ORDERS -->
+  <div id="v-orders" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div style="font-size:17px;font-weight:800;color:var(--nv)">All Orders</div>
+      <div style="display:flex;gap:7px">
+        <input id="srch" placeholder="🔍 Search…"
+          style="padding:6px 11px;border:1.5px solid var(--bd);border-radius:7px;font-size:12px;font-family:var(--fn);outline:none;width:200px"
+          oninput="filtOrds(this.value)">
+        <select id="flt-status" style="padding:6px 9px;border:1.5px solid var(--bd);border-radius:7px;font-size:12px;font-family:var(--fn);outline:none" onchange="filtOrds(document.getElementById('srch').value)">
+          <option value="">All Status</option><option value="draft">Draft</option><option value="final">Final</option>
+        </select>
+        <button class="btn bb sm" onclick="newOrd()">+ New</button>
+      </div>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th>#</th><th>Order No</th><th>Style</th><th>Customer</th><th>PO No</th><th>Article</th><th>Season</th><th>Qty</th><th>Status</th><th>Created By</th><th>Updated</th><th>Actions</th></tr></thead>
+      <tbody id="ot"></tbody>
+    </table></div>
+  </div>
+
+  <!-- PLANNER -->
+  <div id="v-planner" style="display:none">
+    <div id="p-empty" class="es">
+      <div class="es-ic">✂️</div>
+      <div class="es-t">Cut Plan Planner</div>
+      <div class="es-s">Upload PDF or fill in order details on the left, then click Auto Optimize or Generate</div>
+      <div class="flist">
+        <div class="fi"><div class="fd"></div>PDF real-text extraction → auto-fill</div>
+        <div class="fi"><div class="fd"></div>Manual entry also supported</div>
+        <div class="fi"><div class="fd"></div>Multiple fabrics per order</div>
+        <div class="fi"><div class="fd"></div>Smart optimizer — min waste, max efficiency</div>
+        <div class="fi"><div class="fd"></div>Bundles ≤ 10 per marker always</div>
+        <div class="fi"><div class="fd"></div>Size balance + fabric usage report</div>
+        <div class="fi"><div class="fd"></div>Accumark / Gerber CSV export</div>
+      </div>
+    </div>
+    <div id="p-res" style="display:none">
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:11px" id="ppills"></div>
+      <div class="sr s4" id="sr1" style="margin-bottom:8px"></div>
+      <div class="sr s4" id="sr2" style="margin-bottom:13px"></div>
+
+      <div class="card">
+        <div class="ch">✂️ Marker Detail — Plies & Cut Quantities</div>
+        <div class="tw"><table>
+          <thead id="mth"></thead><tbody id="mtb"></tbody><tfoot id="mtf"></tfoot>
+        </table></div>
+      </div>
+
+      <div class="card">
+        <div class="ch">⚖️ Size Balance</div>
+        <div class="tw"><table id="balt"></table></div>
+      </div>
+
+      <div class="card">
+        <div class="ch">🧵 Fabric Utilization</div>
+        <div class="fabrow" id="fabcards"></div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;background:var(--lt);border-radius:6px;padding:7px 11px;font-size:12px;margin-bottom:10px;border:1px solid var(--bd)">
+          <span>Available: <strong id="fav" class="cb">—</strong></span>
+          <span>Used: <strong id="fus" class="co">—</strong></span>
+          <span>Remaining: <strong id="fre">—</strong></span>
+          <span>Usage: <strong id="fpc">—</strong></span>
+          <span>Efficiency: <strong id="fef" class="cg">—</strong></span>
+        </div>
+        <div class="tw"><table id="fabt"></table></div>
+      </div>
+
+      <div class="card">
+        <div class="ch">📤 Accumark / Lay Plan Export</div>
+        <div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:6px;padding:7px 11px;font-size:11px;color:#92400e;margin-bottom:8px">
+          ⚠️ Each row = one Lay — import directly into Accumark, Gerber, or Excel
+        </div>
+        <div class="tw"><table id="acct"></table></div>
+        <div style="display:flex;gap:7px;margin-top:9px;flex-wrap:wrap" class="no-print">
+          <button class="btn bo sm" onclick="expCSV()">📤 Accumark CSV</button>
+          <button class="btn bg sm" onclick="expXLS()">📊 Excel</button>
+          <button class="btn bdk sm" onclick="window.print()">🖨️ Print</button>
+          <button class="btn bb sm" onclick="saveOrd()">💾 Save</button>
+          <select id="st-sel" style="padding:5px 8px;border:1.5px solid var(--bd);border-radius:6px;font-size:12px;font-family:var(--fn)">
+            <option value="draft">Draft</option><option value="final">Final ✅</option>
+          </select>
+          <button class="btn bg sm" onclick="setSt()">Update Status</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPORTS -->
+  <div id="v-reports" style="display:none">
+    <div style="font-size:17px;font-weight:800;color:var(--nv);margin-bottom:13px">📊 Production Analytics</div>
+    <div class="sr s4" id="rep-kpi" style="margin-bottom:12px"></div>
+    <div class="rep-grid">
+      <div class="card">
+        <div class="ch">📅 Monthly Orders & Quantity</div>
+        <div id="rep-monthly" class="chart-bar-wrap"></div>
+      </div>
+      <div class="card">
+        <div class="ch">🏭 Top Customers</div>
+        <div id="rep-cust" class="chart-bar-wrap"></div>
+      </div>
+    </div>
+    <div class="rep-grid">
+      <div class="card">
+        <div class="ch">👕 Top Styles</div>
+        <div id="rep-styles" class="chart-bar-wrap"></div>
+      </div>
+      <div class="card">
+        <div class="ch">📋 Order Status Breakdown</div>
+        <div id="rep-status"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STOCK -->
+  <div id="v-stock" style="display:none">
+    <div style="font-size:17px;font-weight:800;color:var(--nv);margin-bottom:13px">🧵 Fabric Stock Management</div>
+    <div class="stk-grid" id="stk-cards"></div>
+    <div class="card">
+      <div class="ch">Update Stock Levels</div>
+      <div id="stk-form"></div>
+      <button class="btn bg sm" style="margin-top:8px" onclick="saveStock()">💾 Save Stock</button>
+    </div>
+  </div>
+
+  <!-- USERS -->
+  <div id="v-users" style="display:none">
+    <div style="font-size:17px;font-weight:800;color:var(--nv);margin-bottom:13px">👥 User Management</div>
+    <div class="card"><div class="tw"><table>
+      <thead><tr><th>ID</th><th>Username</th><th>Full Name</th><th>Department</th><th>Role</th><th>Status</th><th>Last Login</th><th>Actions</th></tr></thead>
+      <tbody id="ust"></tbody>
+    </table></div></div>
+  </div>
+
+</div><!-- /mn -->
+</div><!-- /body -->
+
+<div class="tst" id="tst"></div>
+
+<!-- ADD USER MODAL -->
+<div class="mbg" id="mod-user">
+  <div class="modal">
+    <div class="mt">👤 Add New User</div>
+    <div class="f2">
+      <div class="f"><label>Username</label><input id="nu-un" placeholder="planner3"></div>
+      <div class="f"><label>Full Name</label><input id="nu-fn" placeholder="Muhammad Ali"></div>
+    </div>
+    <div class="f2">
+      <div class="f"><label>Department</label><input id="nu-dp" placeholder="Cutting"></div>
+      <div class="f"><label>Role</label>
+        <select id="nu-role">
+          <option value="planner">Planner</option>
+          <option value="manager">Manager</option>
+          <option value="admin">Admin</option>
+          <option value="viewer">Viewer (Read-only)</option>
+        </select>
+      </div>
+    </div>
+    <div class="f"><label>Password</label><input type="password" id="nu-pw"></div>
+    <div class="mf">
+      <button class="btn bb" onclick="createUser()">✅ Create User</button>
+      <button class="btn bgh" onclick="closeMod('mod-user')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESET PW MODAL -->
+<div class="mbg" id="mod-pw">
+  <div class="modal">
+    <div class="mt">🔑 Reset Password</div>
+    <input type="hidden" id="rpw-uid">
+    <div class="f"><label>New Password</label><input type="password" id="rpw-np"></div>
+    <div class="mf">
+      <button class="btn bo" onclick="doResetPW()">Reset Password</button>
+      <button class="btn bgh" onclick="closeMod('mod-pw')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SIZES=[32,34,36,38,40,42,44,46];
+const SHRINKS=['3X2','3X3','2X2','4X3','F/L'];
+const SH_ID={'3X2':'sh_3x2','3X3':'sh_3x3','2X2':'sh_2x2','4X3':'sh_4x3','F/L':'sh_fl'};
+const SH_C={'3X2':'b3x2','3X3':'b3x3','2X2':'b2x2','4X3':'b4x3','F/L':'bfl'};
+const DEF_SZ={32:88,34:176,36:324,38:404,40:340,42:268,44:212,46:188};
+const DEF_MK=[
+  {p:100,sh:'3X2',s:{34:1,36:1,38:1,40:1,42:1,44:1,46:1}},
+  {p:100,sh:'3X2',s:{36:1,38:1,40:1,42:1}},
+  {p:86,sh:'3X3',s:{32:1,36:1,38:2,40:1,44:1,46:1}},
+  {p:44,sh:'2X2',s:{34:1,40:1,42:1}},
+  {p:21,sh:'4X3',s:{34:1,36:1,38:1,44:1}},
+  {p:8,sh:'4X3',s:{34:1,36:1}},
+  {p:16,sh:'4X3',s:{42:1}},
+  {p:8,sh:'F/L',s:{34:1,42:2,46:1}},
+  {p:11,sh:'F/L',s:{38:2,44:1}},
+  {p:6,sh:'F/L',s:{32:1}},
+  {p:20,sh:'F/L',s:{36:1,40:1}},
+];
+let mkCnt=0,fabCnt=0,_plan=null,_oid=null,_ords=[],_role='planner';
+
+// INIT
+(async()=>{
+  const me=await api('/api/me');
+  _role=me.role;
+  document.getElementById('uav').textContent=me.uname[0].toUpperCase();
+  document.getElementById('udn').textContent=me.fname||me.uname;
+  const tabs=[
+    {id:'dash',   ic:'📊',l:'Dashboard'},
+    {id:'orders', ic:'📋',l:'Orders'},
+    {id:'planner',ic:'✂️',l:'Planner'},
+    {id:'stock',  ic:'🧵',l:'Fabric Stock'},
+    {id:'reports',ic:'📈',l:'Reports'},
+    {id:'users',  ic:'👥',l:'Users',r:['admin']},
+  ];
+  document.getElementById('nav').innerHTML=tabs
+    .filter(t=>!t.r||t.r.includes(_role))
+    .map(t=>`<button class="nb${t.id==='dash'?' on':''}" id="nb-${t.id}" onclick="goTab('${t.id}')">${t.ic} ${t.l}</button>`)
+    .join('');
+  buildSz();recalc();upFab();
+  addFabric({code:'SA-3485/P',color:'Blue',role:'Main'});
+  DEF_MK.forEach(m=>addMk(m));
+  const dz=document.getElementById('dz');
+  dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dg')});
+  dz.addEventListener('dragleave',()=>dz.classList.remove('dg'));
+  dz.addEventListener('drop',e=>{
+    e.preventDefault();dz.classList.remove('dg');
+    const f=e.dataTransfer.files[0];if(f)doPDF({files:e.dataTransfer.files});
+  });
+  await loadDash();
+  loadStock();
+})();
+
+async function api(url,m='GET',b=null){
+  const o={method:m,headers:{}};
+  if(b){o.headers['Content-Type']='application/json';o.body=JSON.stringify(b);}
+  return (await fetch(url,o)).json();
+}
+
+// NAV
+function goTab(t){
+  ['dash','orders','planner','stock','reports','users'].forEach(x=>{
+    document.getElementById('nb-'+x)?.classList.toggle('on',x===t);
+    document.getElementById('sb-'+x)?.classList.toggle('on',x===t);
+    const v=document.getElementById('v-'+x);if(v)v.style.display=x===t?'block':'none';
+  });
+  if(t==='dash')    loadDash();
+  if(t==='orders')  loadOrds();
+  if(t==='users')   loadUsers();
+  if(t==='stock')   loadStock();
+  if(t==='reports') loadReports();
+}
+
+// DASHBOARD
+async function loadDash(){
+  const s=await api('/api/stats');
+  document.getElementById('dkpi').innerHTML=
+    kc(s.total,'Total Orders')+kc(s.draft,'In Progress','ko')+
+    kc(s.final,'Finalized','kg')+kc(s.today,"Today's New",'kt');
+  document.getElementById('dt').innerHTML=(s.recent||[]).map(o=>
+    `<tr><td><strong>${o.order_no}</strong></td><td>${o.style_no||'—'}</td><td>${o.customer||'—'}</td>
+    <td>${o.order_qty}</td><td><span class="bs-${o.status}">${o.status}</span></td>
+    <td>${o.username||'—'}</td><td style="font-size:10px;color:var(--mu)">${o.updated_at.substr(0,10)}</td>
+    <td><button class="btn bb xs" onclick="openOrd(${o.id})">Open</button></td></tr>`
+  ).join('');
+  document.getElementById('sb-kpis').innerHTML=
+    `<div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
+    ${[['Orders',s.total,''],['Draft',s.draft,'co'],['Final',s.final,'cg'],['Users',s.users_active,'cb']].map(([l,v,c])=>
+      `<div style="background:var(--lt);border:1px solid var(--bd);border-radius:7px;padding:7px;text-align:center">
+      <div class="sv ${c}" style="font-size:17px">${v}</div><div class="sl">${l}</div></div>`
+    ).join('')}</div>`;
+  document.getElementById('sb-act').innerHTML=(s.activity||[]).slice(0,8).map(a=>
+    `<div style="padding:5px 0;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center">
+    <span><strong style="font-size:11px">${a.username}</strong><span style="color:var(--mu)"> ${a.action}${a.details?' #'+a.details:''}</span></span>
+    <span style="color:var(--mu);font-size:10px">${a.created_at.substr(11,5)}</span></div>`
+  ).join('');
+}
+function kc(v,l,cls=''){return`<div class="kc ${cls}"><div class="kv">${v}</div><div class="kl">${l}</div></div>`;}
+
+// ORDERS
+async function loadOrds(){
+  _ords=await api('/api/orders');
+  renderOT(_ords);renderSbOL(_ords);
+}
+function renderOT(ords){
+  document.getElementById('ot').innerHTML=ords.map((o,i)=>
+    `<tr><td style="color:var(--mu)">${i+1}</td><td><strong>${o.order_no}</strong></td>
+    <td>${o.style_no||'—'}</td><td>${o.customer||'—'}</td>
+    <td style="font-family:var(--mo);font-size:10px">${o.cust_po||'—'}</td>
+    <td style="font-size:10px">${o.article_no||'—'}</td>
+    <td style="font-size:11px">${o.season||'—'}</td>
+    <td><strong>${o.order_qty}</strong></td>
+    <td><span class="bs-${o.status}">${o.status}</span></td>
+    <td>${o.by_user||'—'}</td>
+    <td style="font-size:10px;color:var(--mu)">${o.updated_at.substr(0,10)}</td>
+    <td style="white-space:nowrap">
+      <button class="btn bb xs" onclick="openOrd(${o.id})">Open</button>
+      <button class="btn bo xs" onclick="window.open('/api/orders/${o.id}/csv')">CSV</button>
+      ${_role==='admin'?`<button class="btn br xs" onclick="delOrd(${o.id})">Del</button>`:''}
+    </td></tr>`
+  ).join('');
+}
+function renderSbOL(ords){
+  document.getElementById('sb-ol').innerHTML=ords.slice(0,25).map(o=>
+    `<div class="oi ${_oid===o.id?'sel':''}" onclick="openOrd(${o.id})">
+    <div class="oit"><span class="oino">${o.order_no}</span><span class="bs-${o.status}">${o.status}</span></div>
+    <div class="oisub">${o.customer||'—'} | ${o.style_no||'—'} | ${o.order_qty} pcs</div></div>`
+  ).join('')||'<div style="color:var(--mu);font-size:12px;padding:6px">No orders yet</div>';
+}
+function filtOrds(q){
+  const f=q.toLowerCase();
+  const st=document.getElementById('flt-status').value;
+  renderOT(_ords.filter(o=>
+    (!st||o.status===st)&&
+    ((o.order_no||'').toLowerCase().includes(f)||(o.customer||'').toLowerCase().includes(f)||
+     (o.style_no||'').toLowerCase().includes(f)||(o.article_no||'').toLowerCase().includes(f))
+  ));
+}
+async function openOrd(id){
+  const o=await api('/api/orders/'+id); _oid=id;
+  const fm={order_no:'ono',style_no:'sty',customer:'cust',cust_po:'cpo',article_no:'art',
+    description:'desc',pocketing_code:'poc',fabric_width:'wid',avg_cons:'cons',
+    order_qty:'oq',excess_pct:'ex',notes:'notes',season:'season'};
+  Object.entries(fm).forEach(([k,fid])=>{const el=document.getElementById(fid);if(el&&o[k]!=null)el.value=o[k];});
+  const sd=typeof o.size_data==='object'?o.size_data:{};
+  SIZES.forEach(s=>{const el=document.getElementById('so_'+s);if(el&&sd[s]!=null)el.value=sd[s];});
+  const shr=typeof o.shrinkage_data==='object'?o.shrinkage_data:{};
+  SHRINKS.forEach(t=>{const el=document.getElementById(SH_ID[t]);if(el&&shr[t]!=null)el.value=shr[t];});
+  // Fabrics
+  const fabs=Array.isArray(o.fabrics_data)?o.fabrics_data:[];
+  document.getElementById('fab-list').innerHTML='';fabCnt=0;
+  if(fabs.length) fabs.forEach(f=>addFabric(f));
+  else addFabric({code:'',color:'',role:'Main'});
+  // Markers
+  const mks=Array.isArray(o.markers_data)?o.markers_data:[];
+  if(mks.length){document.getElementById('mkblocks').innerHTML='';mkCnt=0;
+    mks.forEach(m=>{const sz={};Object.entries(m.sizes||{}).forEach(([k,v])=>sz[parseInt(k)]=v);addMk({p:m.plies,sh:m.shrink,sd:m.shade||'',s:sz});});}
+  recalc();upFab();
+  const ss=document.getElementById('st-sel');if(ss)ss.value=o.status||'draft';
+  if(o.plan_result&&o.plan_result.markers&&o.plan_result.markers.length){
+    _plan=o.plan_result;renderRes(o.plan_result,o);
+  }
+  goTab('planner');toast('Opened: '+o.order_no);
+}
+function newOrd(){_oid=null;_plan=null;clrForm();goTab('planner');}
+async function delOrd(id){
+  if(!confirm('Delete this order permanently?'))return;
+  await api('/api/orders/'+id,'DELETE');toast('Deleted','w');loadOrds();
+}
+
+// FORM
+function buildSz(){
+  document.getElementById('szinp').innerHTML=SIZES.map(s=>
+    `<div class="szc"><label>${s}</label><input type="number" id="so_${s}" value="${DEF_SZ[s]||0}" min="0" oninput="recalc()"></div>`
+  ).join('');
+}
+function recalc(){
+  let tot=0;SIZES.forEach(s=>tot+=parseInt(document.getElementById('so_'+s)?.value)||0);
+  const ex=(parseFloat(document.getElementById('ex')?.value)||0)/100;
+  document.getElementById('crd').textContent=Math.ceil(tot*(1+ex)).toLocaleString();
+  document.getElementById('szd').textContent=tot.toLocaleString();
+  const row=document.getElementById('crrow');
+  if(row)row.innerHTML=SIZES.map(s=>{const v=parseInt(document.getElementById('so_'+s)?.value)||0;
+    return`<div class="szc"><label>${s}</label><div style="text-align:center;font-family:var(--mo);font-size:11px;font-weight:700;color:var(--or);background:#fff7ed;border-radius:4px;padding:3px">${Math.ceil(v*(1+ex))}</div></div>`;
+  }).join('');
+}
+function getSh(t){return parseFloat(document.getElementById(SH_ID[t])?.value)||0;}
+function upFab(){const tot=SHRINKS.reduce((s,t)=>s+getSh(t),0);document.getElementById('ft').textContent=tot.toFixed(0)+' m';}
+function clrForm(){
+  ['ono','sty','cust','cpo','art','desc','poc','notes','season'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('cons').value='1.12';document.getElementById('oq').value='2000';
+  document.getElementById('ex').value='3';document.getElementById('wid').value='166';
+  SIZES.forEach(s=>{const el=document.getElementById('so_'+s);if(el)el.value=DEF_SZ[s]||0;});
+  document.getElementById('fab-list').innerHTML='';fabCnt=0;addFabric({code:'',color:'',role:'Main'});
+  document.getElementById('mkblocks').innerHTML='';mkCnt=0;DEF_MK.forEach(m=>addMk(m));
+  document.getElementById('p-empty').style.display='flex';document.getElementById('p-res').style.display='none';
+  recalc();upFab();
+}
+
+// MULTI-FABRIC
+function addFabric(pr=null){
+  const i=fabCnt++;
+  const el=document.createElement('div');el.className='fab-item';el.id='fi_'+i;
+  el.innerHTML=`<div class="fab-item-head">
+    <div style="font-size:10px;font-weight:700;color:var(--mu);text-transform:uppercase">Fabric ${i+1}</div>
+    <button class="btn br xs" onclick="document.getElementById('fi_${i}').remove()" style="margin-left:auto">✕</button>
+  </div>
+  <div class="f3">
+    <div class="f"><label>Fabric Code</label><input id="fc_${i}" value="${pr&&pr.code?pr.code:''}" placeholder="SA-3485/P"></div>
+    <div class="f"><label>Color / Shade</label><input id="fcol_${i}" value="${pr&&pr.color?pr.color:''}" placeholder="Blue"></div>
+    <div class="f"><label>Role</label>
+      <select id="frl_${i}">
+        ${['Main','Pocketing','Lining','Interlining','Other'].map(r=>`<option${pr&&pr.role===r?' selected':''}>${r}</option>`).join('')}
+      </select>
+    </div>
+  </div>`;
+  document.getElementById('fab-list').appendChild(el);
+}
+function getFabrics(){
+  const res=[];
+  for(let i=0;i<fabCnt;i++){
+    if(!document.getElementById('fi_'+i))continue;
+    const code=document.getElementById('fc_'+i)?.value||'';
+    const color=document.getElementById('fcol_'+i)?.value||'';
+    const role=document.getElementById('frl_'+i)?.value||'Main';
+    if(code||color)res.push({code,color,role});
+  }
+  return res;
+}
+
+// PDF
+async function doPDF(inp){
+  const file=inp.files[0];if(!file)return;
+  const pm=document.getElementById('pm');
+  pm.className='pm ld';pm.textContent='Reading PDF…';
+  const fd=new FormData();fd.append('file',file);
+  try{
+    const r=await fetch('/api/parse-pdf',{method:'POST',body:fd});
+    const d=await r.json();
+    if(d.error){pm.className='pm er';pm.textContent='❌ '+d.error;return;}
+    const fm={order_no:'ono',style_no:'sty',customer:'cust',cust_po:'cpo',
+      article_no:'art',description:'desc',avg_cons:'cons',order_qty:'oq',excess_pct:'ex',fabric_width:'wid'};
+    let n=0;
+    Object.entries(fm).forEach(([k,fid])=>{if(d[k]!=null){const el=document.getElementById(fid);if(el){el.value=d[k];el.classList.add('af');n++;}}});
+    if(d.size_data)SIZES.forEach(s=>{if(d.size_data[s]!=null){const el=document.getElementById('so_'+s);if(el){el.value=d.size_data[s];el.classList.add('af');n++;}}});
+    if(d.fabric_code){const el=document.getElementById('fc_0');if(el){el.value=d.fabric_code;el.classList.add('af');}}
+    recalc();
+    pm.className='pm ok';pm.textContent=`✅ ${n} fields auto-filled${d.detected_total?' — '+d.detected_total+' pcs':''}`;
+    toast('PDF parsed!');
+  }catch(e){pm.className='pm er';pm.textContent='❌ '+e.message;}
+}
+
+// MARKERS
+function addMk(pr=null){
+  const i=mkCnt++;
+  const opts=SHRINKS.map(s=>`<option value="${s}"${pr&&pr.sh===s?' selected':''}>${s}</option>`).join('');
+  const szC=SIZES.map(s=>{const v=pr&&pr.s&&pr.s[s]?pr.s[s]:0;
+    return`<div class="szmc"><span>${s}</span><input type="number" id="m${i}_s${s}" value="${v}" min="0"></div>`;
+  }).join('');
+  const el=document.createElement('div');el.className='mk';el.id='mb_'+i;
+  el.innerHTML=`<div class="mkh"><div class="mknum">${i+1}</div>
+    <div><div style="font-size:9px;color:var(--mu);font-weight:700;margin-bottom:1px">PLIES</div>
+    <input type="number" class="mkp" id="m${i}_plies" value="${pr?pr.p:100}" min="1"></div>
+    <div><div style="font-size:9px;color:var(--mu);font-weight:700;margin-bottom:1px">SHRINK</div>
+    <select class="mks" id="m${i}_sh">${opts}</select></div>
+    <div><div style="font-size:9px;color:var(--mu);font-weight:700;margin-bottom:1px">SHADE</div>
+    <input type="text" class="mks" id="m${i}_sd" value="${pr&&pr.sd?pr.sd:''}" placeholder="—" style="width:46px"></div>
+    <button class="btn br xs no-print" onclick="document.getElementById('mb_${i}').remove()" style="margin-left:auto;align-self:flex-end">✕</button>
+  </div><div class="szm">${szC}</div>`;
+  document.getElementById('mkblocks').appendChild(el);
+}
+function getMks(){
+  const res=[];
+  for(let i=0;i<mkCnt;i++){
+    if(!document.getElementById('mb_'+i))continue;
+    const plies=parseInt(document.getElementById('m'+i+'_plies')?.value)||0;
+    const shrink=document.getElementById('m'+i+'_sh')?.value||'';
+    const shade=document.getElementById('m'+i+'_sd')?.value||'';
+    if(!plies||!shrink)continue;
+    const sizes={};SIZES.forEach(s=>{const v=parseInt(document.getElementById('m'+i+'_s'+s)?.value)||0;if(v>0)sizes[s]=v;});
+    const ppp=Object.values(sizes).reduce((a,b)=>a+b,0);
+    if(ppp>0)res.push({num:res.length+1,plies,shrink,shade,sizes,ppp});
+  }
+  return res;
+}
+
+// AUTO OPTIMIZE
+async function autoOpt(){
+  const szq={},sh={};
+  SIZES.forEach(s=>szq[s]=parseInt(document.getElementById('so_'+s)?.value)||0);
+  SHRINKS.forEach(t=>{const v=getSh(t);if(v>0)sh[t]=v;});
+  const pl={size_qty:szq,shrinkage:sh,avg_cons:parseFloat(document.getElementById('cons').value)||1.12,
+    order_qty:parseInt(document.getElementById('oq').value)||0,excess_pct:parseFloat(document.getElementById('ex').value)||3,max_bundles:10};
+  const d=await api('/api/optimize','POST',pl);
+  if(!d.ok){toast('Optimize failed','e');return;}
+  document.getElementById('mkblocks').innerHTML='';mkCnt=0;
+  d.markers.forEach(m=>{const sz={};Object.entries(m.sizes||{}).forEach(([k,v])=>sz[parseInt(k)]=v);addMk({p:m.plies,sh:m.shrink,sd:m.shade||'',s:sz});});
+  _plan=d;const ord={order_no:document.getElementById('ono').value,style_no:document.getElementById('sty').value,customer:document.getElementById('cust').value,article_no:document.getElementById('art').value};
+  renderRes(d,ord);goTab('planner');
+  toast(`Optimized! ${d.markers.length} markers | ${d.efficiency}% efficiency | ${d.total_meters}m`);
+}
+
+// GENERATE
+function genPlan(){
+  const oq=parseInt(document.getElementById('oq').value)||0;
+  const ex=(parseFloat(document.getElementById('ex').value)||0)/100;
+  const avg=parseFloat(document.getElementById('cons').value)||1.12;
+  const cr=Math.ceil(oq*(1+ex));
+  const sreq={};SIZES.forEach(s=>sreq[s]=Math.ceil((parseInt(document.getElementById('so_'+s)?.value)||0)*(1+ex)));
+  const mks=getMks();if(!mks.length){toast('Add at least one marker','e');return;}
+  const sp={};SIZES.forEach(s=>sp[s]=0);let tac=0,tm=0,tp=0;const fu={};
+  const rows=mks.map(m=>{
+    const ds=Object.keys(m.sizes).length;const ml=avg*ds;const mu=m.plies*ml;const cq=m.plies*m.ppp;
+    tac+=cq;tm+=mu;tp+=m.plies;
+    SIZES.forEach(s=>{if(m.sizes[s])sp[s]+=m.plies*m.sizes[s];});
+    fu[m.shrink]=(fu[m.shrink]||0)+mu;
+    return{...m,mLen:+ml.toFixed(2),metersUsed:+mu.toFixed(2),cutQty:cq};
+  });
+  const fr={};SHRINKS.forEach(t=>fr[t]=+(getSh(t)-(fu[t]||0)).toFixed(1));
+  const tav=SHRINKS.reduce((s,t)=>s+getSh(t),0);
+  const d={markers:rows,size_plan:sp,size_req:sreq,
+    balance:Object.fromEntries(SIZES.map(s=>[s,sp[s]-sreq[s]])),
+    total_cut:tac,total_req:cr,total_meters:+tm.toFixed(1),total_plies:tp,
+    fab_used:Object.fromEntries(Object.entries(fu).map(([k,v])=>[k,+v.toFixed(1)])),
+    fab_remaining:fr,efficiency:cr>0?+(tac/cr*100).toFixed(1):0,
+    waste_pct:tav>0?+(tm/tav*100).toFixed(1):0};
+  _plan=d;
+  const ord={order_no:document.getElementById('ono').value,style_no:document.getElementById('sty').value,customer:document.getElementById('cust').value,article_no:document.getElementById('art').value};
+  renderRes(d,ord);
+}
+
+// RENDER RESULTS
+function renderRes(d,ord={}){
+  const bal=d.total_cut-d.total_req;
+  const oq=parseInt(document.getElementById('oq').value)||0;
+  const szoq={};SIZES.forEach(s=>szoq[s]=parseInt(document.getElementById('so_'+s)?.value)||0);
+  const fabs=getFabrics();
+  ord={order_no:document.getElementById('ono').value,style_no:document.getElementById('sty').value,
+    customer:document.getElementById('cust').value,article_no:document.getElementById('art').value,...ord};
+  document.getElementById('ppills').innerHTML=
+    `<span class="pill">Order: ${ord.order_no}</span><span class="pill">Customer: ${ord.customer}</span>`+
+    `<span class="pill">Style: ${ord.style_no}</span><span class="pill">Article: ${ord.article_no||'—'}</span>`+
+    fabs.map(f=>`<span class="pill">🧵 ${f.role}: ${f.code}${f.color?' ('+f.color+')':''}</span>`).join('');
+  const bc=bal<0?'tr':bal===0?'tg':'to',bvc=bal<0?'cr':bal===0?'cg':'co';
+  document.getElementById('sr1').innerHTML=
+    sv(oq.toLocaleString(),'Order Qty')+sv(d.total_req.toLocaleString(),'Cut Required','to','co')+
+    sv(d.total_cut.toLocaleString(),'Actual Cut','tg','cg')+sv((bal>=0?'+':'')+bal,'Balance',bc,bvc);
+  document.getElementById('sr2').innerHTML=
+    sv(d.total_meters+'m','Meters Used','tt','cb')+sv(d.total_plies,'Total Plies')+
+    sv(d.markers.length,'Markers')+sv(d.efficiency+'%','Plan Efficiency','tg','cg');
+  renderMkT(d);renderBal(d,szoq,oq);renderFabU(d);renderAcc(d,ord,fabs);
+  document.getElementById('p-empty').style.display='none';
+  document.getElementById('p-res').style.display='block';
+}
+function sv(v,l,tc='',vc=''){return`<div class="sc ${tc}"><div class="sv ${vc}">${v}</div><div class="sl">${l}</div></div>`;}
+
+function renderMkT(d){
+  document.getElementById('mth').innerHTML=
+    `<tr><th rowspan="2">M#</th><th rowspan="2">Shrink</th><th rowspan="2">Shade</th>
+    <th rowspan="2" style="background:#b45309;min-width:50px">PLIES</th>
+    <th colspan="${SIZES.length}" style="background:#065f46">Size Wise Cut Qty</th>
+    <th rowspan="2">Pcs/Ply</th><th rowspan="2" style="background:#065f46">TOTAL</th>
+    <th rowspan="2">Mkr Len</th><th rowspan="2">Meters</th></tr>
+    <tr>${SIZES.map(s=>`<th style="background:#047857">${s}</th>`).join('')}</tr>`;
+  let tb='';
+  d.markers.forEach(m=>{
+    const szc=SIZES.map(s=>{const r=m.sizes[s]||m.sizes[String(s)]||0;
+      if(!r)return`<td style="color:#d1d5db">—</td>`;
+      return`<td style="background:#f0fdf4"><strong>${m.plies*r}</strong><div style="font-size:9px;color:var(--mu)">${r}×${m.plies}</div></td>`;
+    }).join('');
+    tb+=`<tr><td><strong>${m.num}</strong></td><td>${bdg(m.shrink)}</td>
+    <td style="font-size:11px">${m.shade||'—'}</td>
+    <td style="background:#fffbeb;font-size:19px;font-weight:600;font-family:var(--mo)">${m.plies}</td>
+    ${szc}<td><strong>${m.ppp}</strong></td>
+    <td style="background:#dcfce7;font-size:15px;font-weight:700;font-family:var(--mo)">${m.cutQty}</td>
+    <td style="color:var(--mu);font-size:11px">${m.mLen}m</td>
+    <td style="color:var(--mu);font-size:11px">${m.metersUsed}m</td></tr>`;
+  });
+  document.getElementById('mtb').innerHTML=tb;
+  document.getElementById('mtf').innerHTML=
+    `<tr class="tf"><td colspan="3">TOTAL</td><td style="font-size:17px">${d.total_plies}</td>`+
+    SIZES.map(s=>`<td>${d.size_plan[s]||0}</td>`).join('')+
+    `<td>—</td><td style="font-size:15px">${d.total_cut}</td><td>—</td><td>${d.total_meters}m</td></tr>`;
+}
+
+function renderBal(d,szoq,oq){
+  const bal=d.total_cut-d.total_req;
+  const bc=bal<0?'cr':bal===0?'cg':'co';
+  const hdr='<th>Row</th>'+SIZES.map(s=>`<th>${s}</th>`).join('')+'<th>TOTAL</th>';
+  const r1=`<tr class="roq"><td>Order Qty</td>${SIZES.map(s=>`<td>${szoq[s]||0}</td>`).join('')}<td><strong>${oq}</strong></td></tr>`;
+  const r2=`<tr class="rcr"><td><strong>Cut Required</strong></td>${SIZES.map(s=>`<td><strong>${d.size_req[s]||0}</strong></td>`).join('')}<td><strong>${d.total_req}</strong></td></tr>`;
+  const r3=`<tr class="rac"><td><strong>Actual Cut</strong></td>${SIZES.map(s=>`<td><strong>${d.size_plan[s]||0}</strong></td>`).join('')}<td><strong>${d.total_cut}</strong></td></tr>`;
+  const r4=`<tr class="rbl"><td><strong>Balance</strong></td>`+
+    SIZES.map(s=>{const b=(d.size_plan[s]||0)-(d.size_req[s]||0);const c=b===0?'cg':b>0?'co':'cr';return`<td class="${c}">${b>=0?'+':''}${b}</td>`;}).join('')+
+    `<td class="${bc}"><strong>${bal>=0?'+':''}${bal}</strong></td></tr>`;
+  document.getElementById('balt').innerHTML=`<thead><tr>${hdr}</tr></thead><tbody>${r1+r2+r3+r4}</tbody>`;
+}
+
+function renderFabU(d){
+  let cards='',rows='',tav=0,tus=0;
+  SHRINKS.forEach(t=>{
+    const av=getSh(t),us=(d.fab_used||{})[t]||0,rem=av-us;
+    const pct=av>0?Math.min(us/av*100,100):0;
+    const pc=pct>90?'pgr':pct>70?'pgo':'pgg';const rc=rem<0?'cr':rem<50?'co':'cg';
+    tav+=av;tus+=us;
+    cards+=`<div class="fabc"><div>${bdg(t)}</div>
+    <div class="fabn">
+      <div class="fabni"><div class="fabnv cb">${av.toFixed(0)}m</div><div class="fabnl">Avail</div></div>
+      <div class="fabni"><div class="fabnv co">${us.toFixed(1)}m</div><div class="fabnl">Used</div></div>
+      <div class="fabni"><div class="fabnv ${rc}">${rem.toFixed(1)}m</div><div class="fabnl">Rem</div></div>
+    </div><div style="font-size:9px;color:var(--mu)">${pct.toFixed(1)}% used</div>
+    <div class="pw"><div class="pb ${pc}" style="width:${pct.toFixed(0)}%"></div></div></div>`;
+    rows+=`<tr><td>${bdg(t)}</td><td>${av.toFixed(0)}m</td><td class="co">${us.toFixed(1)}m</td>
+    <td class="${rc}">${rem.toFixed(1)}m</td><td>${av>0?(us/av*100).toFixed(1)+'%':'—'}</td></tr>`;
+  });
+  const tr=tav-tus,trc=tr<0?'cr':'cg';
+  document.getElementById('fabcards').innerHTML=cards;
+  document.getElementById('fav').textContent=tav.toFixed(0)+'m';
+  document.getElementById('fus').textContent=tus.toFixed(1)+'m';
+  const re=document.getElementById('fre');re.textContent=tr.toFixed(1)+'m';re.className=trc;
+  document.getElementById('fpc').textContent=tav>0?(tus/tav*100).toFixed(1)+'%':'—';
+  document.getElementById('fef').textContent=(d.efficiency||0)+'%';
+  document.getElementById('fabt').innerHTML=
+    `<thead><tr><th>Type</th><th>Available</th><th>Used</th><th>Remaining</th><th>Usage%</th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr class="tf"><td>TOTAL</td><td>${tav.toFixed(0)}m</td><td>${tus.toFixed(1)}m</td>
+    <td class="${trc}">${tr.toFixed(1)}m</td><td>${tav>0?(tus/tav*100).toFixed(1)+'%':'—'}</td></tr></tfoot>`;
+}
+
+function renderAcc(d,ord,fabs){
+  const mainFab=fabs.find(f=>f.role==='Main')||fabs[0]||{code:'',color:''};
+  const cols=['Lay#','MarkerName','Order','Style','Article','Fabric','Color','Shrinkage','Shade',
+    'Plies','MkrLen_m','TotalMeters_m',...SIZES.map(s=>'Sz'+s),'CutTotal'];
+  const arows=d.markers.map((m,i)=>{
+    const o={'Lay#':i+1,'MarkerName':(ord.style_no||'STY')+'_MKR'+m.num+'_'+m.shrink,
+      'Order':ord.order_no||'','Style':ord.style_no||'','Article':ord.article_no||'',
+      'Fabric':mainFab.code,'Color':mainFab.color,'Shrinkage':m.shrink,'Shade':m.shade||'A',
+      'Plies':m.plies,'MkrLen_m':m.mLen,'TotalMeters_m':m.metersUsed,'CutTotal':m.cutQty};
+    SIZES.forEach(s=>o['Sz'+s]=m.plies*((m.sizes[s]||m.sizes[String(s)])||0)||'');
+    return o;
+  });
+  window._acc={rows:arows,cols};
+  const hdr=cols.map(c=>`<th>${c}</th>`).join('');
+  let body='';arows.forEach(r=>{body+=`<tr>${cols.map(c=>`<td>${r[c]!==undefined?r[c]:''}</td>`).join('')}</tr>`;});
+  const sft=SIZES.map(s=>`<td>${d.markers.reduce((sum,m)=>sum+m.plies*((m.sizes[s]||m.sizes[String(s)])||0),0)}</td>`).join('');
+  document.getElementById('acct').innerHTML=
+    `<thead><tr>${hdr}</tr></thead><tbody>${body}</tbody>
+    <tfoot><tr class="tf"><td colspan="9">TOTAL</td><td>${d.total_plies}</td><td>—</td><td>${d.total_meters}</td>${sft}<td>${d.total_cut}</td></tr></tfoot>`;
+}
+
+// SAVE / STATUS
+async function saveOrd(){
+  const szd={},shd={};
+  SIZES.forEach(s=>szd[s]=parseInt(document.getElementById('so_'+s)?.value)||0);
+  SHRINKS.forEach(t=>shd[t]=getSh(t));
+  const payload={
+    order_no:document.getElementById('ono').value,style_no:document.getElementById('sty').value,
+    customer:document.getElementById('cust').value,cust_po:document.getElementById('cpo').value,
+    article_no:document.getElementById('art').value,description:document.getElementById('desc').value,
+    pocketing_code:document.getElementById('poc').value,season:document.getElementById('season').value,
+    fabric_width:parseFloat(document.getElementById('wid').value)||166,
+    avg_cons:parseFloat(document.getElementById('cons').value)||1.12,
+    order_qty:parseInt(document.getElementById('oq').value)||0,
+    excess_pct:parseFloat(document.getElementById('ex').value)||3,
+    notes:document.getElementById('notes').value,
+    fabrics_data:getFabrics(),size_data:szd,shrinkage_data:shd,
+    markers_data:getMks(),plan_result:_plan||{},
+    status:document.getElementById('st-sel')?.value||'draft'
+  };
+  const d=await api(_oid?'/api/orders/'+_oid:'/api/orders',_oid?'PUT':'POST',payload);
+  if(d.ok){if(!_oid)_oid=d.id;toast('✅ Order saved!');}
+  else toast('Error: '+(d.error||''),'e');
+}
+async function setSt(){
+  if(!_oid){toast('Save order first','w');return;}
+  const st=document.getElementById('st-sel').value;
+  await api('/api/orders/'+_oid+'/status','POST',{status:st});
+  toast('Status → '+st);
+}
+
+// REPORTS
+async function loadReports(){
+  const r=await api('/api/reports/monthly');
+  // KPIs
+  const total_orders=r.monthly.reduce((s,m)=>s+m.orders,0);
+  const total_qty=r.monthly.reduce((s,m)=>s+(m.total_qty||0),0);
+  const total_final=r.monthly.reduce((s,m)=>s+(m.finalized_qty||0),0);
+  const customers=r.by_customer.length;
+  document.getElementById('rep-kpi').innerHTML=
+    sv(total_orders,'Total Orders','','cb')+sv(total_qty.toLocaleString(),'Total Qty Cut','tg','cg')+
+    sv(customers,'Customers','tt','cb')+sv(total_final.toLocaleString(),'Finalized Qty','tp','');
+  // Monthly chart
+  const maxQ=Math.max(1,...r.monthly.map(m=>m.total_qty||0));
+  document.getElementById('rep-monthly').innerHTML=r.monthly.slice(0,8).map(m=>
+    `<div class="cb-row">
+    <div class="cb-label">${m.month}</div>
+    <div class="cb-track"><div class="cb-fill pgg" style="width:${Math.max(5,(m.total_qty||0)/maxQ*100).toFixed(0)}%;background:var(--gr)">${m.orders} orders</div></div>
+    <div class="cb-val">${(m.total_qty||0).toLocaleString()}</div></div>`
+  ).join('');
+  // Customers chart
+  const maxC=Math.max(1,...r.by_customer.map(c=>c.total_qty||0));
+  document.getElementById('rep-cust').innerHTML=r.by_customer.slice(0,8).map(c=>
+    `<div class="cb-row">
+    <div class="cb-label" title="${c.customer}">${c.customer}</div>
+    <div class="cb-track"><div class="cb-fill" style="width:${Math.max(5,(c.total_qty||0)/maxC*100).toFixed(0)}%;background:var(--bl)">${c.orders} orders</div></div>
+    <div class="cb-val">${(c.total_qty||0).toLocaleString()}</div></div>`
+  ).join('');
+  // Styles
+  const maxS=Math.max(1,...r.top_styles.map(s=>s.qty||0));
+  document.getElementById('rep-styles').innerHTML=r.top_styles.map(s=>
+    `<div class="cb-row">
+    <div class="cb-label">${s.style_no}</div>
+    <div class="cb-track"><div class="cb-fill" style="width:${Math.max(5,(s.qty||0)/maxS*100).toFixed(0)}%;background:var(--or)">${s.orders} orders</div></div>
+    <div class="cb-val">${(s.qty||0).toLocaleString()}</div></div>`
+  ).join('');
+  // Status
+  document.getElementById('rep-status').innerHTML=r.by_status.map(s=>
+    `<div style="display:flex;justify-content:space-between;align-items:center;padding:9px;background:var(--lt);border-radius:6px;margin-bottom:5px;border:1px solid var(--bd)">
+    <div><span class="bs-${s.status}">${s.status}</span></div>
+    <div style="font-family:var(--mo);font-weight:700">${s.cnt} orders</div>
+    <div style="color:var(--mu);font-size:12px">${(s.qty||0).toLocaleString()} pcs</div>
+    </div>`
+  ).join('');
+  // Sidebar summary
+  document.getElementById('sb-rep-sum').innerHTML=
+    `<div style="padding:5px 0;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between"><span>Total Orders</span><strong>${total_orders}</strong></div>`+
+    `<div style="padding:5px 0;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between"><span>Total Pieces</span><strong class="cg">${total_qty.toLocaleString()}</strong></div>`+
+    `<div style="padding:5px 0;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between"><span>Customers</span><strong class="cb">${customers}</strong></div>`+
+    `<div style="padding:5px 0;display:flex;justify-content:space-between"><span>This Month</span><strong>${r.monthly[0]?r.monthly[0].orders:0} orders</strong></div>`;
+}
+
+// STOCK
+async function loadStock(){
+  const rows=await api('/api/stock');
+  // Main cards
+  document.getElementById('stk-cards').innerHTML=rows.map(r=>{
+    const avail=r.available_m||0,res=r.reserved_m||0,free=avail-res;
+    const cls=free>500?'cg':free>100?'co':'cr';
+    return`<div class="stk-c"><div>${bdg(r.shrink_type)}</div>
+    <div class="stk-v ${cls}">${free.toFixed(0)}</div>
+    <div class="stk-l">m free</div>
+    <div style="font-size:9px;color:var(--mu);margin-top:2px">Total: ${avail}m | Reserved: ${res}m</div>
+    </div>`;
+  }).join('');
+  // Edit form
+  document.getElementById('stk-form').innerHTML=rows.map(r=>
+    `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+    ${bdg(r.shrink_type)}
+    <div class="f" style="margin:0;flex:0 0 auto"><label style="font-size:9px">Available (m)</label><input type="number" id="stk_${r.shrink_type.replace('/','_')}" value="${r.available_m||0}" style="width:90px;padding:4px 8px;border:1.5px solid var(--bd);border-radius:6px;font-family:var(--mo);font-size:12px;outline:none"></div>
+    <div class="f" style="margin:0;flex:0 0 auto"><label style="font-size:9px">Reserved (m)</label><input type="number" id="stk_res_${r.shrink_type.replace('/','_')}" value="${r.reserved_m||0}" style="width:80px;padding:4px 8px;border:1.5px solid var(--bd);border-radius:6px;font-family:var(--mo);font-size:12px;outline:none"></div>
+    <div class="f" style="margin:0;flex:1"><label style="font-size:9px">Notes</label><input type="text" id="stk_note_${r.shrink_type.replace('/','_')}" value="${r.notes||''}" style="padding:4px 8px;border:1.5px solid var(--bd);border-radius:6px;font-size:11px;outline:none;width:100%"></div>
+    </div>`
+  ).join('');
+  // Sidebar form
+  document.getElementById('sb-stk').innerHTML=rows.map(r=>{
+    const av=r.available_m||0,res=r.reserved_m||0,free=av-res;const c=free>500?'cg':free>100?'co':'cr';
+    return`<div style="padding:8px 0;border-bottom:1px solid var(--bd)">
+    <div style="display:flex;justify-content:space-between;align-items:center">${bdg(r.shrink_type)}<span class="${c}" style="font-family:var(--mo);font-weight:700">${free.toFixed(0)}m</span></div>
+    <div class="pw" style="margin-top:4px"><div class="pb pgg" style="width:${av>0?Math.min(free/av*100,100).toFixed(0):0}%"></div></div>
+    </div>`;
+  }).join('');
+}
+async function saveStock(){
+  const rows=await api('/api/stock');
+  const updates=rows.map(r=>{
+    const k=r.shrink_type.replace('/','_');
+    return{shrink_type:r.shrink_type,
+      available_m:parseFloat(document.getElementById('stk_'+k)?.value)||0,
+      reserved_m:parseFloat(document.getElementById('stk_res_'+k)?.value)||0,
+      notes:document.getElementById('stk_note_'+k)?.value||''};
+  });
+  await api('/api/stock','POST',updates);loadStock();toast('Stock updated!');
+}
+
+// USERS
+async function loadUsers(){
+  const users=await api('/api/users');
+  document.getElementById('ust').innerHTML=users.map(u=>
+    `<tr><td>${u.id}</td><td><strong>${u.username}</strong></td><td>${u.full_name||'—'}</td>
+    <td>${u.department||'—'}</td><td><span class="bs-${u.role}">${u.role}</span></td>
+    <td><span class="${u.active?'cg':'cr'}">${u.active?'Active':'Disabled'}</span></td>
+    <td style="font-size:10px;color:var(--mu)">${(u.last_login||'Never').substr(0,16)}</td>
+    <td style="white-space:nowrap">
+      <button class="btn bgh xs" onclick="openPW(${u.id})">🔑 PW</button>
+      ${u.id!==1?`<button class="btn xs ${u.active?'br':'bg'}" onclick="togUser(${u.id})">${u.active?'Disable':'Enable'}</button>`:''}
+    </td></tr>`
+  ).join('');
+  document.getElementById('sb-ul').innerHTML=users.map(u=>
+    `<div style="padding:7px 0;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center">
+    <div><strong style="font-size:12px">${u.username}</strong><div style="font-size:10px;color:var(--mu)">${u.full_name||''} | ${u.department||''}</div></div>
+    <span class="bs-${u.role}">${u.role}</span></div>`
+  ).join('');
+}
+async function createUser(){
+  const d=await api('/api/users','POST',{username:document.getElementById('nu-un').value,full_name:document.getElementById('nu-fn').value,department:document.getElementById('nu-dp').value,password:document.getElementById('nu-pw').value,role:document.getElementById('nu-role').value});
+  if(d.ok){closeMod('mod-user');loadUsers();toast('User created!');}
+  else toast('Error: '+(d.error||''),'e');
+}
+function openPW(uid){document.getElementById('rpw-uid').value=uid;openMod('mod-pw');}
+async function doResetPW(){
+  const uid=document.getElementById('rpw-uid').value,pw=document.getElementById('rpw-np').value;
+  const d=await api('/api/users/'+uid+'/password','POST',{password:pw});
+  if(d.ok){closeMod('mod-pw');toast('Password reset!');}else toast('Error','e');
+}
+async function togUser(uid){await api('/api/users/'+uid+'/toggle','POST');loadUsers();}
+
+// EXPORT
+function expCSV(){if(!window._acc)return;const{rows,cols}=window._acc;
+  const csv=[cols.join(',')].concat(rows.map(r=>cols.map(c=>`"${r[c]!==undefined?r[c]:''}"`).join(','))).join('\n');
+  dl(csv,'text/csv',`CutPlan_${document.getElementById('ono').value||'order'}.csv`);}
+function expXLS(){if(!window._acc)return;const{rows,cols}=window._acc;
+  let h=`<html><body><table border="1"><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr>`;
+  rows.forEach(r=>{h+=`<tr>${cols.map(c=>`<td>${r[c]!==undefined?r[c]:''}</td>`).join('')}</tr>`;});
+  dl(h+'</table></body></html>','application/vnd.ms-excel',`CutPlan_${document.getElementById('ono').value||'order'}.xls`);}
+function dl(ct,mt,nm){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([ct],{type:mt}));a.download=nm;a.click();}
+
+// HELPERS
+function bdg(s){return`<span class="bdg ${SH_C[s]||'bfl'}">${s}</span>`;}
+function openMod(id){document.getElementById(id).classList.add('on');}
+function closeMod(id){document.getElementById(id).classList.remove('on');}
+function toast(msg,t='ok'){
+  const el=document.createElement('div');
+  el.className='ti'+(t==='e'?' e':t==='w'?' w':'');
+  el.textContent=msg;document.getElementById('tst').appendChild(el);
+  setTimeout(()=>el.remove(),3800);
+}
+document.querySelectorAll('.mbg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on');}));
+</script>
+</body>
+</html>

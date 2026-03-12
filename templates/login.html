@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CutPlan Pro — Login</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;min-height:100vh;background:#07101f;
+  display:flex;align-items:center;justify-content:center;overflow:hidden}
+canvas{position:fixed;inset:0;z-index:0}
+.card{position:relative;z-index:10;width:400px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);
+  border-radius:20px;padding:44px 38px;
+  box-shadow:0 32px 80px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.07);
+  animation:up .45s cubic-bezier(.34,1.56,.64,1)}
+@keyframes up{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+.ic{width:64px;height:64px;margin:0 auto 16px;border-radius:16px;
+  background:linear-gradient(135deg,#1a56db,#0891b2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;box-shadow:0 8px 28px rgba(26,86,219,.45)}
+.brand{text-align:center;margin-bottom:34px}
+.bn{color:#fff;font-size:21px;font-weight:800;letter-spacing:-.4px}
+.bs{color:rgba(255,255,255,.35);font-size:11px;margin-top:4px}
+.err{display:none;background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);
+  border-radius:8px;padding:10px 14px;font-size:12px;color:#fca5a5;margin-bottom:14px}
+.err.on{display:block}
+label{display:block;font-size:10px;font-weight:700;color:rgba(255,255,255,.4);
+  text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
+input{width:100%;padding:12px 15px;margin-bottom:15px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  border-radius:9px;font-size:14px;color:#fff;font-family:'Outfit',sans-serif;
+  outline:none;transition:.2s}
+input::placeholder{color:rgba(255,255,255,.22)}
+input:focus{border-color:#1a56db;background:rgba(26,86,219,.1);box-shadow:0 0 0 3px rgba(26,86,219,.15)}
+.btn{width:100%;padding:13px;border:none;border-radius:9px;
+  background:linear-gradient(135deg,#1a56db,#1d4ed8);color:#fff;
+  font-size:14px;font-weight:700;font-family:'Outfit',sans-serif;
+  cursor:pointer;transition:.2s;letter-spacing:.2px;margin-top:2px}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(26,86,219,.4)}
+.hint{margin-top:20px;padding:13px 15px;background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);border-radius:9px;
+  font-size:11px;color:rgba(255,255,255,.3);line-height:2}
+.hint strong{color:rgba(255,255,255,.55);font-family:'JetBrains Mono',monospace}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="card">
+  <div class="brand">
+    <div class="ic">✂️</div>
+    <div class="bn">CUTPLAN PRO</div>
+    <div class="bs">Diamond Fabrics Limited — Cutting Division</div>
+  </div>
+  <div class="err" id="err"></div>
+  <label>Username</label>
+  <input id="un" type="text" placeholder="Enter username" autocomplete="username">
+  <label>Password</label>
+  <input id="pw" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')go()">
+  <button class="btn" id="btn" onclick="go()">Sign In →</button>
+  <div class="hint">
+    <strong>admin</strong> / admin123 &nbsp;·&nbsp;
+    <strong>planner1</strong> / plan123 &nbsp;·&nbsp;
+    <strong>manager</strong> / mgr123
+  </div>
+</div>
+<script>
+const cv=document.getElementById('cv'),cx=cv.getContext('2d');
+let W,H,pts=[];
+function sz(){W=cv.width=innerWidth;H=cv.height=innerHeight}sz();addEventListener('resize',sz);
+for(let i=0;i<55;i++)pts.push({x:Math.random()*3000,y:Math.random()*2000,
+  vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:Math.random()*1.4+.4});
+function draw(){
+  cx.clearRect(0,0,W,H);
+  pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+    cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    cx.fillStyle='rgba(100,160,255,.35)';cx.fill();});
+  for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+    const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+    if(d<130){cx.beginPath();cx.moveTo(pts[i].x,pts[i].y);cx.lineTo(pts[j].x,pts[j].y);
+    cx.strokeStyle=`rgba(80,140,255,${.12*(1-d/130)})`;cx.lineWidth=.5;cx.stroke();}}
+  requestAnimationFrame(draw);
+}draw();
+async function go(){
+  const btn=document.getElementById('btn'),err=document.getElementById('err');
+  err.classList.remove('on');btn.textContent='Signing in…';btn.disabled=true;
+  try{
+    const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({username:document.getElementById('un').value,password:document.getElementById('pw').value})});
+    const d=await r.json();
+    if(d.ok)window.location.href='/';
+    else{err.textContent=d.error;err.classList.add('on');}
+  }catch(e){err.textContent='Cannot connect to server';err.classList.add('on');}
+  btn.textContent='Sign In →';btn.disabled=false;
+}
+</script>
+</body>
+</html>
